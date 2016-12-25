@@ -16,6 +16,7 @@ import (
   "net/http"
   "net/url"
   "strings"
+  "github.com/disintegration/imaging"
 )
 
 const apiKey string = "6Le-wvkSAAAAAPBMRTvw0Q4Muexq9bi0DJwx_mJ-"
@@ -28,7 +29,6 @@ func fetchImg(ck string) (image.Image) {
   q.Set("c", ck)
   q.Set("k", apiKey)
   u.RawQuery = q.Encode()
-  //fmt.Println(u)
 
   // do fetch
   imgresponse, err := http.Get(u.String())
@@ -103,28 +103,30 @@ func main() {
     //fmt.Println(ck, typ, img.Bounds())
     fmt.Println(hh, typ, img.Bounds())
 
+    if img.Bounds() != image.Rect(0,0,300,300) {
+      log.Fatal("IMAGE IS THE WRONG SIZE")
+    }
+
     // write it
     os.MkdirAll("imgs/"+typ, 0755)
-    f, err := os.OpenFile("imgs/"+typ+"/"+hh+".png", os.O_CREATE | os.O_WRONLY, 0644)
-    if err != nil { log.Fatal(err) }
-    png.Encode(f, img)
-    f.Close()
+    src0, ok := img.(*image.NRGBA)
+    fmt.Println(src0, ok)
+
+    cnt := 0
+    for h := 0; h < 300; h += 100 {
+      for w := 0; w < 300; w += 100 {
+        lilimg := imaging.Crop(img, image.Rect(w,h,w+100,h+100))
+
+        fn := fmt.Sprintf("imgs/%s/%s_%d.png", typ, hh, cnt)
+        f, err := os.OpenFile(fn, os.O_CREATE | os.O_WRONLY, 0644)
+        if err != nil { log.Fatal(err) }
+        png.Encode(f, lilimg)
+        f.Close()
+
+        cnt += 1
+      }
+    }
   }
-
-  //if typ == "street signs" { break }
-
-  /*if false {
-    //fmt.Println(img.SubImage(image.Rect(0,0,100,100)).Bounds())
-    _ = image.Rect(0,0,100,100)
-  }
-  fmt.Println(img.At(0,0))*/
-
-  /*bb, _ := ioutil.ReadAll(imgresponse.Body)
-  if false { fmt.Println(bb) }
-  fmt.Println(bb[0:5])*/
-
-  //if err != nil { log.Fatal(err) }
-  //defer imgresponse.Body.Close()
 
   // move on
   fmt.Println("still alive!")
