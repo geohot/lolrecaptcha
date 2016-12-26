@@ -11,25 +11,30 @@ TODO: don't be cheater and use python only golang pull request accepted
 */
 
 import (
-  "path/filepath"
-  "image"
-  "image/png"
-  "os"
-  "log"
+	"image"
+	"image/png"
+	"log"
+	"os"
+	"path/filepath"
 )
 
 func main() {
-  imgarr := []image.Image{}
-  filepath.Walk("imgs/", func(path string, finfo os.FileInfo, err error) error {
-    if finfo.IsDir() { return nil }
-    println(path)
-    f, err := os.Open(path)
-    if err != nil { log.Fatal(err) }
-    img, err := png.Decode(f)
-    imgarr = append(imgarr, img)
-    if err != nil { log.Fatal(err) }
-    f.Close()
-    return nil
-  });
+	imgarr := []image.Image{}
+	filepath.Walk("imgs/", func(path string, finfo os.FileInfo, err error) error {
+		if finfo.IsDir() {
+			return nil
+		}
+		println(path)
+		f, err := os.Open(path)
+		if err != nil {
+			log.Fatal(err)
+		}
+		img, err := png.Decode(f)
+		imgarr = append(imgarr, img)
+		if err != nil {
+			log.Fatal(err)
+		}
+		f.Close()
+		return nil
+	})
 }
-

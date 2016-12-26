@@ -1,2 +1,6 @@
 .*.swp
 imgs
+
+#Idea Project files
+.idea/
+*.iml
