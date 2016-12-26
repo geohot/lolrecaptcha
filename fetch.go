@@ -130,9 +130,9 @@ func downloader() {
 func main() {
   fmt.Println("my first golang program")
 
-  for i := 0; i < 8; i += 1 {
+  /*for i := 0; i < 8; i += 1 {
     go downloader()
-  }
+  }*/
   downloader()
 
   // move on
