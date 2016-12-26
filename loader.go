@@ -12,24 +12,40 @@ TODO: don't be cheater and use python only golang pull request accepted
 
 import (
   "path/filepath"
-  "image"
   "image/png"
   "os"
   "log"
 )
 
+
 func main() {
-  imgarr := []image.Image{}
+  log.Print("use log so we don't have to put an underscore before the import")
+
+  paths := make(chan string)
+
+  // image loader and network runner 
+  go func() {
+    for {
+      path := <-paths
+
+      // load the image, this is 5 lines
+      // i hate all this error handling does go have exceptions?
+      f, err := os.Open(path)
+      if err != nil { log.Fatal(err) }
+      img, err := png.Decode(f)
+      if err != nil { log.Fatal(err) }
+      f.Close()
+
+      println(img)
+    }
+  }()
+
   filepath.Walk("imgs/", func(path string, finfo os.FileInfo, err error) error {
     if finfo.IsDir() { return nil }
-    println(path)
-    f, err := os.Open(path)
-    if err != nil { log.Fatal(err) }
-    img, err := png.Decode(f)
-    imgarr = append(imgarr, img)
-    if err != nil { log.Fatal(err) }
-    f.Close()
+    paths <- path
     return nil
   });
+
+
 }
 
