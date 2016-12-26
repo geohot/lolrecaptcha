@@ -12,11 +12,13 @@ import (
   "log"
   "os"
   "golang.org/x/net/html"
+  "math/rand"
   "io/ioutil"
   "net/http"
   "net/url"
   "strings"
   "github.com/disintegration/imaging"
+  "time"
 )
 
 const apiKey string = "6Le-wvkSAAAAAPBMRTvw0Q4Muexq9bi0DJwx_mJ-"
@@ -124,6 +126,7 @@ func downloader() {
       }
     }
     bigcnt += 1
+    time.Sleep(time.Duration(rand.Intn(2000))*time.Millisecond)
   }
 }
 
