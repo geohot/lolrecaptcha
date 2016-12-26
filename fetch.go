@@ -89,9 +89,7 @@ func getChallengeKey() (string, string, image.Image) {
   }
 }
 
-func main() {
-  fmt.Println("my first golang program")
-
+func downloader() {
   bigcnt := 0
   for {
     // parse it
@@ -127,6 +125,15 @@ func main() {
     }
     bigcnt += 1
   }
+}
+
+func main() {
+  fmt.Println("my first golang program")
+
+  for i := 0; i < 8; i += 1 {
+    go downloader()
+  }
+  downloader()
 
   // move on
   fmt.Println("still alive!")
