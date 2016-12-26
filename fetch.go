@@ -92,6 +92,7 @@ func getChallengeKey() (string, string, image.Image) {
 func main() {
   fmt.Println("my first golang program")
 
+  bigcnt := 0
   for {
     // parse it
     ck, typ, img := getChallengeKey()
@@ -101,7 +102,7 @@ func main() {
     hh := hex.EncodeToString(h.Sum(nil))
     typ = strings.Replace(typ, " ", "_", -1)
     //fmt.Println(ck, typ, img.Bounds())
-    fmt.Println(hh, typ, img.Bounds())
+    fmt.Println(bigcnt, hh, typ, img.Bounds())
 
     if img.Bounds() != image.Rect(0,0,300,300) {
       log.Fatal("IMAGE IS THE WRONG SIZE")
@@ -109,8 +110,6 @@ func main() {
 
     // write it
     os.MkdirAll("imgs/"+typ, 0755)
-    src0, ok := img.(*image.NRGBA)
-    fmt.Println(src0, ok)
 
     cnt := 0
     for h := 0; h < 300; h += 100 {
@@ -126,6 +125,7 @@ func main() {
         cnt += 1
       }
     }
+    bigcnt += 1
   }
 
   // move on
